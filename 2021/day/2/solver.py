@@ -4,6 +4,7 @@ from math import prod
 
 MACHINE1 = {
     "init":     (0,0),
+    "evaluate":   lambda st: (st[0] * st[1]),
     "forward":  lambda op, st: (st[0] + op, st[1]),
     "down":     lambda op, st: (st[0], st[1] + op),
     "up":       lambda op, st: (st[0], st[1] - op),
@@ -11,6 +12,7 @@ MACHINE1 = {
 
 MACHINE2 = {
     "init":     (0,0,0),
+    "evaluate": lambda st: (st[0] * st[1]),
     "forward":  lambda op, st: (st[0] + op, st[1] + st[2] * op, st[2]),
     "down":     lambda op, st: (st[0], st[1], st[2] + op),
     "up":       lambda op, st: (st[0], st[1], st[2] - op),
@@ -24,8 +26,6 @@ def processor(machine):
 
 if __name__ == "__main__":
     with open("input") as fh:
-        print(prod(reduce(processor(MACHINE1), [ln.strip().split() for ln in fh.readlines()], MACHINE1["init"])))
+        print(MACHINE1["evaluate"](reduce(processor(MACHINE1), [ln.strip().split() for ln in fh.readlines()], MACHINE1["init"])))
     with open("input") as fh:
-        print(prod(reduce(processor(MACHINE2), [ln.strip().split() for ln in fh.readlines()], MACHINE2["init"])[:2]))
-
-
+        print(MACHINE2["evaluate"](reduce(processor(MACHINE2), [ln.strip().split() for ln in fh.readlines()], MACHINE2["init"])[:2]))
