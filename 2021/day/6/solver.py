@@ -19,6 +19,6 @@ DAYS = [80,256]
 if __name__ == "__main__":
     for days in DAYS:
         state = MACHINE["init"]()
-        for i in range(days):
+        for _ in range(days):
             state = MACHINE["advance"](state)
         print(MACHINE["evaluate"](state))
