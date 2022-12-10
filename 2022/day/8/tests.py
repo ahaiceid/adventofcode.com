@@ -8,6 +8,10 @@ class TestSolver(unittest.TestCase):
     def test_part1(self):
         self.assertEqual(solver.part1(self.sample_input), 21)
 
-    @unittest.skip('Not yet implemented.')
+    def test_calculate_scenic_score(self):
+        tree_grid = solver.CoordinateSpace([[int(h) for h in line.strip()] for line in self.sample_input])
+        self.assertEqual(solver.calculate_scenic_score(tree_grid, (2,1)), 4)
+        self.assertEqual(solver.calculate_scenic_score(tree_grid, (2,3)), 8)
+
     def test_part2(self):
-        self.assertEqual(solver.part2(self.sample_input), 0)
+        self.assertEqual(solver.part2(self.sample_input), 8)

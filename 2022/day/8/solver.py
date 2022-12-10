@@ -50,38 +50,30 @@ def mark_vis(tree_grid, vis_grid):
                 max_height = tree_grid[this_coord]
 
 def calculate_scenic_score(tree_grid, coord):
-    
-    if coord[0] == 0 or coord[1] == 0 or tree_grid.width -1 <= coord[1] or tree_grid.height -1 <= coord[0]:
+    if (coord[0] == 0) or coord[1] == 0 or tree_grid.width == coord[1] + 1 or tree_grid.height == coord[0] + 1:
         return 0
-    
     tree_height = tree_grid[coord]
-    up = coord[0]
-    max_height = 0
-    for row in range(coord[1],-1,-1):
-        if tree_grid[(coord[0],row)] > tree_height:
+    up = coord[1]
+    for row in range(coord[1] - 1, -1, -1):
+        if tree_grid[(coord[0],row)] >= tree_height:
             up = coord[1] - row
             break
     down = 0
-    max_height = 0
-    for row in range(coord[1],tree_grid.height):
-        if tree_grid[(coord[0],row)] > tree_height:
-            down = row - coord[1]
+    for row in range(coord[1]+1,tree_grid.height):
+        down = row - coord[1]
+        if tree_grid[(coord[0],row)] >= tree_height:
             break
-
-    import pdb; pdb.set_trace()
-    left = 0
-    max_height = 0
-    for col in range(coord[0], -1, -1):
-        if tree_grid[(col,coord[1])] > max_height:
-            left += 1
-            max_height = tree_grid[(col,coord[1])]
+    left = coord[0]
+    for col in range(coord[0] - 1, -1, -1):
+        if tree_grid[(col,coord[1])] >= tree_height:
+            left = coord[0] - col
+            break
     right = 0
-    max_height = 0
-    for col in range(coord[0], tree_grid.width):
-        if tree_grid[(col,coord[1])] > max_height:
-            right += 1
-            max_height = tree_grid[(col,coord[1])]
-    return up*down*left*right
+    for col in range(coord[0]+1, tree_grid.width):
+        right = col - coord[0]
+        if tree_grid[(col,coord[1])] >= tree_height:
+            break
+    return up * down * left * right
 
 def part1(input_data):
     tree_grid = CoordinateSpace([[int(h) for h in line.strip()] for line in input_data])
@@ -101,9 +93,15 @@ def part1(input_data):
     return sum([sum(row) for row in vis_grid.data])
 
 def part2(input_data):
-    pass
+    tree_grid = CoordinateSpace([[int(h) for h in line.strip()] for line in input_data])
+    scenic_score_grid = CoordinateSpace([[0 for _c in range(tree_grid.width)] for _r in range(tree_grid.height)])
+    for row in range(tree_grid.height):
+        for col in range(tree_grid.width):
+            scenic_score_grid[(row,col)] = calculate_scenic_score(tree_grid,(row,col))
+    return max([max(row) for row in scenic_score_grid.data])
 
 if __name__ == "__main__":
-    import pdb; pdb.set_trace()
     with open('input', 'r') as input_data:
         print(part1(input_data))
+    with open('input', 'r') as input_data:
+        print(part2(input_data))
