@@ -17,14 +17,14 @@ class TestSolver(unittest.TestCase):
         ([1,[2,[3,[4,[5,6,7]]]],8,9], [1,[2,[3,[4,[5,6,0]]]],8,9], 1)
     ]
 
-    def test_comparator(self):
+    def test_compare(self):
         for sample_comparison in self.sample_comparisons:
             with self.subTest(str(sample_comparison)):
-                self.assertEqual(solver.is_less_than(sample_comparison[0],sample_comparison[1]),sample_comparison[2])
+                self.assertEqual(solver.compare(sample_comparison[0],sample_comparison[1]),sample_comparison[2])
 
     def test_sorting(self):
         packet_list = [loads(packet) for packet in solver.read_ignoring_empty_lines(self.sample_data)] + [[[2]],[[6]]]
-        packet_list.sort(key=cmp_to_key(solver.is_less_than))
+        packet_list.sort(key=cmp_to_key(solver.compare))
         expected = [[], [[]], [[[]]], [1, 1, 3, 1, 1], [1, 1, 5, 1, 1], [[1], [2, 3, 4]], [1, [2, [3, [4, [5, 6, 0]]]], 8, 9], [1, [2, [3, [4, [5, 6, 7]]]], 8, 9], [[1], 4], [[2]], [3], [[4, 4], 4, 4], [[4, 4], 4, 4, 4], [[6]], [7, 7, 7], [7, 7, 7, 7], [[8, 7, 6]], [9]]
         self.assertEqual(packet_list, expected)
 

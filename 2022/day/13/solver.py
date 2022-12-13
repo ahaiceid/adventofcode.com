@@ -23,7 +23,7 @@ def read_ignoring_empty_lines(file_handle):
             yield line
 
 
-def is_less_than(a, b):
+def compare(a, b):
     if isinstance(a,int) and isinstance(b,int):
         if a<b: return -1
         if a>b: return 1
@@ -37,7 +37,7 @@ def is_less_than(a, b):
             return -1
         if second is None:
             return 1
-        result = is_less_than(first, second)
+        result = compare(first, second)
         if result != 0:
             return result
     return 0
@@ -48,14 +48,14 @@ def part1(input_data):
     for i, (a_str, b_str) in enumerate(read_in_chunks(input_data)):
         a = json.loads(a_str)
         b = json.loads(b_str)
-        if is_less_than(a,b) < 0:
+        if compare(a,b) < 0:
             count += i+1
     return count
 
 def part2(input_data):
     packets = [json.loads(line) for line in read_ignoring_empty_lines(input_data)]
     packets.extend([[[2]],[[6]]])
-    packets.sort(key=cmp_to_key(is_less_than))
+    packets.sort(key=cmp_to_key(compare))
     return (packets.index([[2]])+1) * (packets.index([[6]])+1)
 
 
