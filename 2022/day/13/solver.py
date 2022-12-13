@@ -1,5 +1,5 @@
 
-from functools import reduce
+from functools import cmp_to_key
 from itertools import zip_longest
 import json
 
@@ -25,22 +25,22 @@ def read_ignoring_empty_lines(file_handle):
 
 def is_less_than(a, b):
     if isinstance(a,int) and isinstance(b,int):
-        if a<b: return True
-        if a>b: return False
-        return None
+        if a<b: return -1
+        if a>b: return 1
+        return 0
     if isinstance(a,int):
         a = [a]
     if isinstance(b,int):
         b = [b]
     for first, second in zip_longest(a,b):
         if first is None:
-            return True
+            return -1
         if second is None:
-            return False
+            return 1
         result = is_less_than(first, second)
-        if result in [True,False]:
+        if result != 0:
             return result
-    return None
+    return 0
 
 
 def part1(input_data):
@@ -48,16 +48,15 @@ def part1(input_data):
     for i, (a_str, b_str) in enumerate(read_in_chunks(input_data)):
         a = json.loads(a_str)
         b = json.loads(b_str)
-        if is_less_than(a,b):
+        if is_less_than(a,b) < 0:
             count += i+1
     return count
 
 def part2(input_data):
     packets = [json.loads(line) for line in read_ignoring_empty_lines(input_data)]
-    packets.append([[2]])
-    packets.append([[6]])
-    import pdb; pdb.set_trace()
-    packets.sort(cmp=is_less_than)
+    packets.extend([[[2]],[[6]]])
+    packets.sort(key=cmp_to_key(is_less_than))
+    return (packets.index([[2]])+1) * (packets.index([[6]])+1)
 
 
 if __name__ == '__main__':
