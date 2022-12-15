@@ -1,6 +1,7 @@
 import unittest
 
 def generate_reverse_onion(max_coord):
+    '''Generator to yield 2d positions moving outwards in a spiral from a midpoint'''
     layer = 0
     while layer < max_coord//2 + 1:
         layer_min = int(max_coord/2-max_coord%2/2)-layer
