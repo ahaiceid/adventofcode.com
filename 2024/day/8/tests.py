@@ -46,6 +46,7 @@ class TestSolver(unittest.TestCase):
     def test_part1(self):
         self.assertEqual(solver.part1(self.sample_data), 14)
 
-    @unittest.skip("not yet implemented")
     def test_part2(self):
+        t_data = ['T....#....', '...T......', '.T....#...', '.........#', '..#.......', '..........', '...#......', '..........', '....#.....', '..........']
+        self.assertEqual(solver.part2(t_data), 9)
         self.assertEqual(solver.part2(self.sample_data), 34)
